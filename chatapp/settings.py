@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-
+from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,9 +25,13 @@ SECRET_KEY = "django-insecure-d(m12*mmz58-50@jssduq!m6kf1ciu)kx3c1_@y1sn$e$znrg3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
-
+CSRF_TRUSTED_ORIGINS = [
+    'http://65.2.168.195',
+    # You can also add other trusted origins here
+    # 'http://your-domain.com',
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -79,7 +83,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [(config("REDIS_HOST",default="127.0.0.1"), 6379)],
         },
     },
 }
@@ -99,15 +103,7 @@ LOGIN_REDIRECT_URL = "chat_home"
 LOGIN_URL = "login"
 LOGOUT_REDIRECT_URL = "login"
 
-# Channels
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("localhost", 6379)],
-        },
-    },
-}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
